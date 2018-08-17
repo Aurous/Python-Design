@@ -5,12 +5,12 @@ class users:
 		return {"id":id,"name":name,"email":email,"logged":True}
 		
 class pyfunc:
-	def __init__(self, host, user, passwd, database):
+	def __init__(self, data):
 		self.con = mysql.connector.connect(
-			host=host,
-			user=user,
-			passwd=passwd,
-			database=database
+			host=data['host'],
+			user=data['user'],
+			passwd=data['password'],
+			database=data['database']
 		)
 		self.cursor = self.con.cursor()
 	#def signup(self, users_name, users_email, users_password):

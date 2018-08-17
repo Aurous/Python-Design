@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = data['app.key']
 
-sql = pyfunc(data['sql.settings'][0], data['sql.settings'][1], data['sql.settings'][2], data['sql.settings'][3])
+sql = pyfunc(data['sql.settings'])
 sql.project = projects()
 @app.route("/",methods = ['POST', 'GET'])
 def index():
@@ -43,13 +43,13 @@ def logout():
 def home():
 	error = request.args.get('error') if request.args.get('error') is not None else ''
 	success = request.args.get('success') if request.args.get('success') is not None else ''
-	#try:
-	if(session['user']['logged']):
-		if request.method == 'POST':
-			if(sql.project.create(sql, session['user'], request.form['name'])):
-				return redirect(url_for('edit', id=sql.cursor.lastrowid))
-		return render_template("home.html", projects=sql.project.get(sql, session['user'], all=True), error=error, success=success)
-	#except:
+	try:
+		if(session['user']['logged']):
+			if request.method == 'POST':
+				if(sql.project.create(sql, session['user'], request.form['name'])):
+					return redirect(url_for('edit', id=sql.cursor.lastrowid))
+			return render_template("home.html", projects=sql.project.get(sql, session['user'], all=True), error=error, success=success)
+	except:
 		return redirect(url_for('index'))
 	return redirect(url_for('index'))
 		

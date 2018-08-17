@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <title>Delete</title> 
+	
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<a class="navbar-brand" href="#">Navbar</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
+			<li class="nav-item"><a class="nav-link" href="/projects">Projects</a></li>
+			<li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter">New Project</a></li>
+		</ul>
+		<form class="form-inline my-2 my-lg-0">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+			</ul>
+		</form>
+	</div>
+</nav>
+<br />
+<div class="container">
+<h4>Confim deleting project:</h4>
+<h5>{{ project[0][1] }}</h5><br />
+<form method="post">
+<button type="button" class="btn btn-primary" onclick="window.history.back();">Go Back</button>
+<input class="btn btn-warning" type="submit">
+</form>
+</body>
+</html>

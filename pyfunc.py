@@ -1,11 +1,8 @@
 import mysql.connector
 
 class users:
-	def __init__(self, id, name, email):
-		self.id = id
-		self.name = name
-		self.email = email
-		self.logged = True
+	def new(self, id, name, email):
+		return {"id":id,"name":name,"email":email,"logged":True}
 		
 class pyfunc:
 	def __init__(self, host, user, passwd, database):
@@ -31,53 +28,58 @@ class pyfunc:
 		results = self.cursor.fetchall()
 		if(self.cursor.rowcount == 1):
 			print("Logged In")
-			self.user = users(results[0][0], results[0][1], results[0][2])
+			#self.user = users(results[0][0], results[0][1], results[0][2])
 			#print(self.user)\
-			return True
+			user = users()
+			return user.new(results[0][0], results[0][1], results[0][2])
 		else:
 			print("Failed Logging In")
 			return False
-	def logged(self):
+	def logged(self, user):
 		try:
-			if(user.logged):
+			if(user['logged']):
 				return True
 			else:
 				return False
 		except:
 			return False
-	def logout(self):
+	def logout(self, user):
 		#try:
-		if(self.user.logged):
+		if(user['logged']):
 			try:
-				self.user.logged = False
+				user['logged'] = False
 			except:
 				print("Error logging out")
 
 class projects:
 	def create(self, sql, user, name):
-		sql.cursor.execute("INSERT INTO `projects` (projects_name, projects_data, users_id) VALUES (%s, %s, %s)", (name, '', user.id))
+		sql.cursor.execute("INSERT INTO `projects` (projects_name, projects_data, users_id) VALUES (%s, %s, %s)", (name, '', user['id']))
 		sql.con.commit()
 		if(sql.cursor.rowcount == 1):
-			print("Project Added")
+			return True
+		else:
+			return False
 		
 	def get(self, sql, user, all=False, id=0):
 		if(all):
-			sql.cursor.execute("SELECT `projects_name`, `projects_id` FROM projects WHERE users_id = %s", (user.id, ))
+			sql.cursor.execute("SELECT `projects_name`, `projects_id` FROM projects WHERE users_id = %s", (user['id'], ))
 			results = sql.cursor.fetchall()
 			return results
 		else:
-			sql.cursor.execute("SELECT * FROM projects WHERE users_id = %s AND projects_id = %s", (user.id, id, ))
+			sql.cursor.execute("SELECT * FROM projects WHERE users_id = %s AND projects_id = %s", (user['id'], id, ))
 			results = sql.cursor.fetchall()
 			return results
 			
 	def delete(self, sql, user, id):
-		sql.cursor.execute("DELETE FROM `projects` WHERE `projects_id` = %s AND `users_id` = %s", (id, user.id, ))
+		sql.cursor.execute("DELETE FROM `projects` WHERE `projects_id` = %s AND `users_id` = %s", (id, user['id'], ))
 		sql.con.commit()
 		if(sql.cursor.rowcount == 1):
-			print("Project Deleted")
+			return True
+		else:
+			return False
 		
 	def update(self, sql, user, name, data, id):
-		sql.cursor.execute("UPDATE `projects` SET `projects_name`= %s,`projects_data`= %s WHERE `users_id`= %s AND `projects_id`= %s", (name, data, user.id, id))
+		sql.cursor.execute("UPDATE `projects` SET `projects_name`= %s,`projects_data`= %s WHERE `users_id`= %s AND `projects_id`= %s", (name, data, user['id'], id))
 		sql.con.commit()
 		if(sql.cursor.rowcount == 1):
 			print("Project Updated")

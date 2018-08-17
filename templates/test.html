@@ -1,0 +1,50 @@
+<html>
+<head>
+	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+	
+	<title>Read More Example (with character count)</title>
+
+	<style type="text/css">
+		a:visited {color:#0254eb}
+		.ccount {width:400px; background-color:#f0f0f0; margin:10px}
+		.morecontent span {display:none}
+	</style>
+
+	<script type="text/javascript">
+		
+		$(function() {
+	    
+	    character_count = $('.ccount').attr('data-ccount');
+	    // can change these
+	    var showChar = character_count;
+	    var ellipsestext = "...";
+	    $('.more').each(function () {
+	        var content = $(this).html();
+	        if (content.length > showChar) {
+	            var c = content.substr(0, showChar);
+	            var h = content.substr(showChar - 1, content.length - showChar);
+	            var html = c + '<span class="moreelipses">' + ellipsestext + '</span>&nbsp;<span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;</span>';
+	            $(this).html(html);
+	        }
+	    });
+	});
+	</script>
+
+</head>
+
+<body>
+
+<div class="ccount more" data-ccount="100">
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	Vestibulum laoreet, nunc eget laoreet sagittis,
+	quam ligula sodales orci, congue imperdiet eros tortor ac lectus.
+	Duis eget nisl orci. Aliquam mattis purus non mauris
+	blandit id luctus felis convallis.
+	Integer varius egestas vestibulum.
+	Nullam a dolor arcu, ac tempor elit. Donec.
+</div>
+
+</body>
+
+</html>

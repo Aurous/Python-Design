@@ -10,9 +10,14 @@ app.secret_key = data['app.key']
 
 sql = pyfunc(data['sql.settings'][0], data['sql.settings'][1], data['sql.settings'][2], data['sql.settings'][3])
 sql.project = projects()
-@app.route("/")
+@app.route("/",methods = ['POST', 'GET'])
 def index():
 	return render_template("index.html")
+	
+@app.route("/signup",methods = ['POST', 'GET'])
+def signup():
+	error = request.args.get('error') if request.args.get('error') is not None else ''
+	return render_template("signup.html", error=error)
 	
 @app.route("/login",methods = ['POST', 'GET'])
 def login():
@@ -25,7 +30,7 @@ def login():
 			error = "Failed to Login"
 	return render_template("login.html", error=error)
 
-@app.route("/logout")
+@app.route("/logout",methods = ['POST', 'GET'])
 def logout():
 	try:
 		if(session['user'].logged):
@@ -64,13 +69,14 @@ def delete():
 		return redirect(url_for('home', error="Error Deleting Project"))
 	return render_template("delete.html", project=sql.project.get(sql, session['user'], id=request.args.get('id')))
 
-@app.route("/view")
+@app.route("/view",methods = ['POST', 'GET'])
 def view():
-	return "test"
+	return render_template('view.html')
 	
-@app.route("/edit")
+@app.route("/edit",methods = ['POST', 'GET'])
 def edit():
-	return request.args.get('id')
+	return render_template('edit.html')
+	
 #@app.route("/test")
 #def test():
 #	return render_template("test.html")

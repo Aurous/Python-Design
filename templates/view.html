@@ -6,7 +6,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
-	<title>Login</title> 
+	<title>View</title> 
 	
 </head>
 <body>
@@ -17,25 +17,19 @@
 		</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item"><a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a></li>
+			<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
+			<li class="nav-item"><a class="nav-link" href="/projects">Projects</a></li>
+			<li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter">New Project</a></li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" href="/signup">Signup</a></li>
-				<li class="nav-item active"><a class="nav-link" href="#">Login</a></li>
+				<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
 			</ul>
 		</form>
 	</div>
 </nav>
 <br />
 <div class="container">
-<h1>Login</h1>
-<font color='red'>{{ error }}</font><br /><br />
-<form method='POST'>
-Email: <input type='text' name='email' class="form-control" value='ltryanhill@gmail.com' /><br /><br />
-Password: <input type='text' name='password' class="form-control" value='test' /><br /><br />
-<input class="btn btn-primary" type='submit' />
-</form>
 </div>
 	<!-- Javascript Shit -->
 	<script src="static/js/jquery-3.3.1.min.js"></script>
@@ -43,4 +37,4 @@ Password: <input type='text' name='password' class="form-control" value='test' /
     <script src="static/js/bootstrap.min.js"></script>
 </body> 
 
-</html> 
+</html>

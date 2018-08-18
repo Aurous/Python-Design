@@ -30,11 +30,71 @@
 </nav>
 <br />
 <div class="container">
+<h3>{{project[1]}}</h3><br />
+<div class="row">
+<nav class="nav nav-justified">
+  <a class="nav-link" href="#">Save</a>
+  <a class="nav-link" href="#" onclick="runit()" >Run</a>
+  <a class="nav-link" href="/view?id={{project[0]}}">View</a>
+  <a class="nav-link" href="#">Delete</a>
+</nav>
 </div>
+<form> 
+<textarea class="form-control" id="yourcode" cols="40" rows="10">
+{{ project[2] }}
+</textarea><br /> 
+</form> 
+<div class="row">
+<label class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">Output:</label>
+<label class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">Visual Output:</label>
+</div>
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" style="border-style: solid;border-width:1px;border-color: #dddddd;border-radius:5px;"><pre id="output"></pre></div>
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 align-self-end" style="border-style: solid;border-width:1px;border-color: #dddddd;border-radius:5px;" id="mycanvas"></div> 
+</div>
+</div>
+	
 	<!-- Javascript Shit -->
 	<script src="static/js/jquery-3.3.1.min.js"></script>
     <!--<script src="static/js/popper.min.js"></script>-->
     <script src="static/js/bootstrap.min.js"></script>
+	<script src="static/js/skulpt.min.js"></script>
+	<script src="static/js/skulpt-stdlib.js"></script>
+	<script type="text/javascript"> 
+	// output functions are configurable.  This one just appends some text
+	// to a pre element.
+	function outf(text) { 
+		var mypre = document.getElementById("output"); 
+		mypre.innerHTML = mypre.innerHTML + text; 
+	} 
+	function builtinRead(x) {
+		if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+				throw "File not found: '" + x + "'";
+		return Sk.builtinFiles["files"][x];
+	}
+	// Here's everything you need to run a python program in skulpt
+	// grab the code from your textarea
+	// get a reference to your pre element for output
+	// configure the output function
+	// call Sk.importMainWithBody()
+	function runit() { 
+	   var prog = document.getElementById("yourcode").value; 
+	   var mypre = document.getElementById("output"); 
+	   mypre.innerHTML = ''; 
+	   Sk.pre = "output";
+	   Sk.configure({output:outf, read:builtinRead}); 
+	   (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+	   var myPromise = Sk.misceval.asyncToPromise(function() {
+		   return Sk.importMainWithBody("<stdin>", false, prog, true);
+	   });
+	   myPromise.then(function(mod) {
+		   console.log('success');
+	   },
+		   function(err) {
+		   console.log(err.toString());
+	   });
+	} 
+	</script> 
 </body> 
 
 </html>

@@ -71,11 +71,11 @@ def delete():
 
 @app.route("/view",methods = ['POST', 'GET'])
 def view():
-	return render_template('view.html')
+	return render_template('view.html', project=sql.project.get(sql, session['user'], id=request.args.get('id')))
 	
 @app.route("/edit",methods = ['POST', 'GET'])
 def edit():
-	return render_template('edit.html')
+	return render_template('edit.html', project=sql.project.get(sql, session['user'], id=request.args.get('id')))
 	
 #@app.route("/test")
 #def test():

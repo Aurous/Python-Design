@@ -68,7 +68,7 @@ class projects:
 		else:
 			sql.cursor.execute("SELECT * FROM projects WHERE users_id = %s AND projects_id = %s", (user['id'], id, ))
 			results = sql.cursor.fetchall()
-			return results
+			return results[0]
 			
 	def delete(self, sql, user, id):
 		sql.cursor.execute("DELETE FROM `projects` WHERE `projects_id` = %s AND `users_id` = %s", (id, user['id'], ))

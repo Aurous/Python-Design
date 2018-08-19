@@ -1,7 +1,10 @@
 from flask import Flask, request, url_for, render_template, redirect, session
 import json
+import os
 from pyfunc import pyfunc, users, projects
-with open('settings.json') as jsonvars:
+dir = os.path.dirname(os.path.abspath(__file__))
+location = os.path.join(dir, 'settings.json')
+with open(location) as jsonvars:
     data = json.load(jsonvars)
 
 app = Flask(__name__)

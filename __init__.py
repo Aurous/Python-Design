@@ -20,6 +20,8 @@ def index():
 @app.route("/signup",methods = ['POST', 'GET'])
 def signup():
 	error = request.args.get('error') if request.args.get('error') is not None else ''
+	if request.method == "POST":
+		sql.signup(request.form['name'], request.form['email'], request.form['password'])
 	return render_template("signup.html", error=error)
 	
 @app.route("/login",methods = ['POST', 'GET'])
@@ -56,9 +58,9 @@ def home():
 		return redirect(url_for('index'))
 	return redirect(url_for('index'))
 		
-@app.route("/project", methods = ['POST', 'GET'])
-def project():
-	return request.args.get('id')
+@app.route("/projects", methods = ['POST', 'GET'])
+def projects():
+	return render_template("projects.html")
 	
 @app.route("/delete", methods = ['POST', 'GET'])
 def delete():
@@ -80,9 +82,9 @@ def view():
 def edit():
 	return render_template('edit.html', project=sql.project.get(sql, session['user'], id=request.args.get('id')))
 	
-#@app.route("/test")
-#def test():
-#	return render_template("test.html")
+@app.route("/test")
+def test():
+	return render_template("test.html")
 if __name__ == "__main__":
     app.debug = True
     app.run()

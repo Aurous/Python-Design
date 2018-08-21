@@ -45,7 +45,6 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
-			<li class="nav-item"><a class="nav-link" href="/projects">Projects</a></li>
 			<li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter">New Project</a></li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0">
@@ -58,8 +57,11 @@
 <br />
 <div class="container">
 <h3>{{project[1]}}</h3>
+<div id="result">
+
+</div>
 <nav class="nav nav-justified">
-  <a class="nav-link" href="#">Save</a>
+  <a class="nav-link" href="#"id="save" name="save">Save</a>
   <a class="nav-link" href="#" onclick="runit()" >Run</a>
   <a class="nav-link" href="#" onclick="editor.undo()" >Undo</a>
   <a class="nav-link" href="#" onclick="editor.redo()" >Redo</a>
@@ -67,7 +69,7 @@
   <a class="nav-link ml-auto" href="/delete?id={{project[0]}}">Delete</a>
 </nav>
 <div class="row" style="border-style: solid;border-width:1px;border-color: black;border-radius:2px;" >
-<div class="col-12" id="editor">{{project[2]}}</div>
+<div class="col-12" id="editor" name="editor">{{project[2]}}</div>
 </div>
     <br /> 
 <div class="row">
@@ -118,7 +120,7 @@
 		   console.log('success');
 	   },
 		   function(err) {
-		   console.log(err.toString());
+		   outf(err.toString());
 	   });
 	} 
 	</script> 
@@ -131,6 +133,38 @@
 			maxLines: 30
 		});
 		editor.setShowPrintMargin(false);
+	</script>
+	<script>
+	window.setTimeout(function () {
+		$(".alert").fadeTo(500, 0).slideUp(500, function () {
+			$(this).remove();
+		});
+	}, 5000);
+	</script>
+	<script>
+		$(function() {
+			$('#save').click(function() {
+				console.log(editor.getValue())
+				$.ajax({
+					url: "{{ url_for('save') }}",
+					data: '{"code":"'+encodeURIComponent(editor.getValue())+'","name":"{{project[1]}}","id":"{{project[0]}}"}',
+					type: 'POST',
+					dataType: 'json',
+					contentType: 'application/json;charset=UTF-8',
+					success: function(response) {
+						if(response['status'] == "true"){
+							$("#result").html("<div class='alert alert-success alert-dismissible fade show' role='alert'>"+response['message']+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>");
+						}else{
+							$("#result").html("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"+response['message']+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>");
+						}
+						
+					},
+					error: function(error) {
+						console.log(error);
+					}
+				});
+			});
+		});
 	</script>
 <br />
 <br />

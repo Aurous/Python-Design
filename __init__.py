@@ -2,7 +2,7 @@ from flask import Flask, request, url_for, render_template, redirect, session
 import json
 import urllib
 import os
-from pyfunc import pyfunc, users, projects
+from pyfunc import pyfunc, users, projects, shares
 dir = os.path.dirname(os.path.abspath(__file__))
 location = os.path.join(dir, 'settings.json')
 with open(location) as jsonvars:
@@ -14,7 +14,7 @@ app.secret_key = data['app.key']
 
 sql = pyfunc(data['sql.settings'])
 sql.project = projects()
-
+sql.shares = shares()
 @app.route("/",methods = ['POST', 'GET'])
 def index():
 	return render_template("index.html")
@@ -57,7 +57,7 @@ def home():
 		if request.method == 'POST':
 			if(sql.project.create(sql, session['user'], request.form['name'])):
 				return redirect(url_for('edit', id=sql.cursor.lastrowid))
-		return render_template("home.html", projects=sql.project.get(sql, session['user'], all=True), shared=sql.project.shared(sql, session['user'], all=True), error=error, success=success)
+		return render_template("home.html", projects=sql.project.get(sql, session['user'], all=True), shared=sql.shares.get(sql, session['user'], all=True), error=error, success=success)
 	#except:
 		#return redirect(url_for('index'))
 	return redirect(url_for('index'))
@@ -80,7 +80,7 @@ def view():
 	if(isinstance(project, tuple)):
 		return render_template('view.html', project=project)
 	else:
-		project = sql.project.shared(sql, session['user'], id=request.args.get('id'))
+		project = sql.shares.get(sql, session['user'], id=request.args.get('id'))
 		if(isinstance(project, tuple)):
 			return render_template('view.html', project=project)
 		return redirect(url_for('home', error=project))
@@ -91,7 +91,7 @@ def edit():
 	if(isinstance(project, tuple)):
 		return render_template('edit.html', project=project)
 	else:
-		project = sql.project.shared(sql, session['user'], id=request.args.get('id'))
+		project = sql.shares.get(sql, session['user'], id=request.args.get('id'))
 		if(project[4] != "View"):
 			if(isinstance(project, tuple)):
 				return render_template('edit.html', project=project)
@@ -107,7 +107,11 @@ def save():
 
 @app.route("/share", methods=['GET', 'POST'])
 def sharing():
-	return render_template('share.html')
+	if request.method == "POST":
+		#here
+		print("test")
+	return render_template('share.html', sharing=sql.project.sharing())
+
 @app.route("/test")
 def test():
 	return render_template("test.html")

@@ -108,25 +108,23 @@ class projects:
 			print("Project Updated")
 		else:
 			return False
-		
-	def shared(self, sql, user, all=False, id=0):
+
+class shares:
+	def get(self, sql, user, all=False, id=0):
 		if(all):
 			sql.cursor.execute("SELECT * FROM users_has_projects WHERE users_id = %s", (user['id'], ))
 			if(sql.cursor.rowcount == 1):
 				result = sql.cursor.fetchall()
 				projects = []
 				for project in result:
-					#print(project[2])
 					sql.cursor.execute("SELECT * FROM projects WHERE projects_id = %s", (project[1], ))
 					if(sql.cursor.rowcount == 1):
 						results = sql.cursor.fetchall()
 						full = list(results[0])
 						full.append(project[2])
 						projects.append(tuple(full))
-						#print(projects)
 				return projects
 		elif(id != 0):
-			#This needs worked on
 			sql.cursor.execute("SELECT * FROM users_has_projects WHERE users_id = %s AND projects_id = %s", (user['id'], id, ))
 			if(sql.cursor.rowcount == 1):
 				result = sql.cursor.fetchall()
@@ -141,3 +139,25 @@ class projects:
 				return "Unable to get project data"
 		else:
 			return "No defined project"
+			
+	def add():
+		return "test"
+	
+	def delete():
+		return "test"
+	
+	def id2email(self, sql, id):
+		sql.cursor.execute("SELECT `users_email` FROM users WHERE users_id = %s", (id, ))
+		if(sql.cursor.rowcount == 1):
+			result = sql.cursor.fetchall()
+			return result[0]
+		else:
+			return False
+			
+	def email2id(self, sql, email):
+		sql.cursor.execute("SELECT `users_id` FROM users WHERE users_email = %s", (email, ))
+		if(sql.cursor.rowcount == 1):
+			result = sql.cursor.fetchall()
+			return result[0]
+		else:
+			return False

@@ -56,9 +56,19 @@
 <br />
 <div class="container">
 <h3>{{project[1]}}</h3>
+{% if project[4] == "Edit" %}
+	{% set access = "Edit" %}
+{% elif project[4] == "Admin" %}
+	{% set access = "Admin" %}
+{% elif project[4] %}
+	{% set access = "None" %}
+{% else %}
+	{% set access = "Admin" %}
+{% endif %}
 <nav class="nav nav-justified">
   <a class="nav-link" href="#" onclick="runit()" >Run</a>
-  <a class="nav-link ml-auto" href="/edit?id={{project[0]}}">Edit</a>
+  {% if access == "Admin" %}<a class="nav-link ml-auto" href="/share?id={{project[0]}}">Sharing Options</a>{% endif %}
+  {% if access == "Edit" or access == "Admin" %}<a class="nav-link ml-auto" href="/edit?id={{project[0]}}">Edit</a>{% endif %}
 </nav>
 <div class="row" style="border-style: solid;border-width:1px;border-color: black;border-radius:2px;">
 	<div class="col-12" id="editor">{{project[2]}}</div>

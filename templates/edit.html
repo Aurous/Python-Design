@@ -44,7 +44,7 @@
 		</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
+			<li class="nav-item active"><a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a></li>
 			<li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter">New Project</a></li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0">
@@ -57,6 +57,15 @@
 <br />
 <div class="container">
 <h3>{{project[1]}}</h3>
+{% if project[4] == "Edit" %}
+	{% set access = "Edit" %}
+{% elif project[4] == "Admin" %}
+	{% set access = "Admin" %}
+{% elif project[4] %}
+	{% set access = "None" %}
+{% else %}
+	{% set access = "Admin" %}
+{% endif %}
 <div id="result">
 
 </div>
@@ -66,7 +75,8 @@
   <a class="nav-link" href="#" onclick="editor.undo()" >Undo</a>
   <a class="nav-link" href="#" onclick="editor.redo()" >Redo</a>
   <a class="nav-link ml-auto" href="/view?id={{project[0]}}">View</a>
-  <a class="nav-link ml-auto" href="/delete?id={{project[0]}}">Delete</a>
+  {% if access == "Admin" %}<a class="nav-link ml-auto" href="/share?id={{project[0]}}">Sharing Options</a>{% endif %}
+  {% if access == "Admin" %}<a class="nav-link ml-auto" href="/delete?id={{project[0]}}">Delete</a>{% endif %}
 </nav>
 <div class="row" style="border-style: solid;border-width:1px;border-color: black;border-radius:2px;" >
 <div class="col-12" id="editor" name="editor">{{project[2]}}</div>

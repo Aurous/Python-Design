@@ -80,6 +80,9 @@ def view():
 	if(isinstance(project, tuple)):
 		return render_template('view.html', project=project)
 	else:
+		project = sql.project.shared(sql, session['user'], id=request.args.get('id'))
+		if(isinstance(project, tuple)):
+			return render_template('view.html', project=project)
 		return redirect(url_for('home', error=project))
 	
 @app.route("/edit",methods = ['POST', 'GET'])
@@ -89,9 +92,10 @@ def edit():
 		return render_template('edit.html', project=project)
 	else:
 		project = sql.project.shared(sql, session['user'], id=request.args.get('id'))
-		if(isinstance(project, tuple)):
-			return render_template('edit.html', project=project)
-		#return redirect(url_for('home'), error=project)
+		if(project[4] != "View"):
+			if(isinstance(project, tuple)):
+				return render_template('edit.html', project=project)
+		return redirect(url_for('home', error=project))
 	
 @app.route("/save", methods = ['POST'])
 def save():
@@ -101,6 +105,9 @@ def save():
 		else:
 			return json.dumps({'status':'false','message':'Unable to save'})
 
+@app.route("/share", methods=['GET', 'POST'])
+def sharing():
+	return render_template('share.html')
 @app.route("/test")
 def test():
 	return render_template("test.html")

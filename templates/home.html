@@ -89,13 +89,14 @@
 	<h4>Shared Projects</h4><br />
 	<div class="row">
 		{% for share in shared %}
+		{{ share }}
 		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
 			<div class="card mb-4">
 				  <div class="card-body">
 						<h5 class="ccount more" data-ccount="16">{{ share[1] }}</h5>
 						<a class="btn btn-info" href="/view?id={{ share[0] }}">View</a>
-						<a class="btn btn-primary" href="/edit?id={{ share[0]}}">Edit</a>
-						<a class="btn btn-danger" href="/delete?id={{ share[0]}}">Delete</a>
+						{% if share[4] == "Edit" or share[4] == "Admin" %}<a class="btn btn-primary" href="/edit?id={{ share[0]}}">Edit</a>{% endif %}
+						{% if share[4] == "Admin" %}<a class="btn btn-danger" href="/delete?id={{ share[0]}}">Delete</a>{% endif %}
 				  </div>
 			</div>
 		</div>

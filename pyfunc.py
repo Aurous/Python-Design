@@ -116,23 +116,27 @@ class projects:
 				result = sql.cursor.fetchall()
 				projects = []
 				for project in result:
+					#print(project[2])
 					sql.cursor.execute("SELECT * FROM projects WHERE projects_id = %s", (project[1], ))
 					if(sql.cursor.rowcount == 1):
 						results = sql.cursor.fetchall()
-						projects.append(results[0])
+						full = list(results[0])
+						full.append(project[2])
+						projects.append(tuple(full))
+						#print(projects)
 				return projects
 		elif(id != 0):
 			#This needs worked on
 			sql.cursor.execute("SELECT * FROM users_has_projects WHERE users_id = %s AND projects_id = %s", (user['id'], id, ))
 			if(sql.cursor.rowcount == 1):
 				result = sql.cursor.fetchall()
-				projects = []
 				for project in result:
 					sql.cursor.execute("SELECT * FROM projects WHERE projects_id = %s", (project[1], ))
 					if(sql.cursor.rowcount == 1):
 						results = sql.cursor.fetchall()
-						projects.append(results[0])
-				return projects
+						full = list(results[0])
+						full.append(project[2])
+				return tuple(full)
 			else:
 				return "Unable to get project data"
 		else:

@@ -108,9 +108,19 @@ def save():
 @app.route("/share", methods=['GET', 'POST'])
 def sharing():
 	if request.method == "POST":
-		#here
+		print(sql.shares.email2id(sql, request.form['email']))
+		if(request.form['submit'] == "Delete"):
+			if(sql.shares.delete(sql, session['user'], request.args.get('id'), sql.shares.email2id(sql, request.form['email']), request.form['access'])):
+				success = "Deleted Successfully"
+			else:
+				error = "Unable to Delete"
+		elif(request.form['submit'] == "Add"):
+			if(sql.shares.add(sql, session['user'], request.args.get('id'), sql.shares.email2id(sql, request.form['email']), request.form['access'])):
+				success = "Added Successfully"
+			else:
+				error = "Unable to Add"
 		print("test")
-	return render_template('share.html', sharing=sql.project.sharing())
+	return render_template('share.html', sharing=sql.shares.sharing())
 
 @app.route("/test")
 def test():

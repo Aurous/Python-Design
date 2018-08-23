@@ -47,9 +47,10 @@
 </nav>
 <br />
 <div class="container">
-<form action="POST">
+<form method="POST">
 Share with email: <input type="email" class="form-control col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-5" name="email" /><br />
-<input type="submit" class="btn btn-success" value="Add Email"/>&nbsp;&nbsp;<button type="button" class="btn btn-primary" onclick="window.history.back();">Cancel</button>
+Access: <select class="form-control col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-5" id="access" name="access"><option>View</option><option>Edit</option></select><br />
+<input type="submit" class="btn btn-success" name="submit" value="Add"/>&nbsp;&nbsp;<button type="button" class="btn btn-primary" onclick="window.history.back();">Cancel</button>
 </form>
 </div>
 	<!-- Javascript Shit -->

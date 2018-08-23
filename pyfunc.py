@@ -3,8 +3,6 @@ import hashlib
 import mysql.connector
 
 def check(hash, text):
-	print(hash)
-	print(text)
 	_hash, salt = hash.split(':')
 	return _hash == hashlib.sha256(salt.encode() + text.encode()).hexdigest()
 
@@ -30,21 +28,16 @@ class pyfunc:
 			self.con.commit()
 			if(self.cursor.rowcount == 1):
 				return True
-				print("User Added")
 		else:
 			return False
-			print("Email Already In Use")
 	
 	def login(self, users_email, users_password):
 		self.cursor.execute("SELECT * FROM `users` WHERE `users_email` = %s", (users_email, ))
 		results = self.cursor.fetchall()
-		print(check(results[0][3],users_password))
 		if self.cursor.rowcount == 1 and check(results[0][3],users_password):
-			print("Logged In")
 			user = users()
 			return user.new(results[0][0], results[0][1], results[0][2])
 		else:
-			print("Failed Logging In")
 			return False
 	
 	def logged(self, user):
@@ -55,14 +48,6 @@ class pyfunc:
 				return False
 		except:
 			return False
-			
-	def logout(self, user):
-		#try:
-		if(user['logged']):
-			try:
-				user['logged'] = False
-			except:
-				print("Error logging out")
 	
 	def hashing(self, text):
 		salt = uuid.uuid4().hex
@@ -105,7 +90,6 @@ class projects:
 		sql.con.commit()
 		if(sql.cursor.rowcount == 1):
 			return True
-			print("Project Updated")
 		else:
 			return False
 
@@ -139,18 +123,35 @@ class shares:
 				return "Unable to get project data"
 		else:
 			return "No defined project"
-			
-	def add():
+	
+	def sharing(self):
 		return "test"
 	
-	def delete():
-		return "test"
+	def add(self, sql, user, id, email, access):
+		sql.cursor.execute("SELECT * FROM projects WHERE users_id = %s AND `projects_id` = %s", (user['id'], id, ))
+		if(sql.cursor.rowcount == 1):
+			sql.cursor.execute("SELECT * FROM users_has_projects WHERE `users_id` = %s AND `projects_id` = %s", (email, id, ))
+			if(sql.cursor.rowcount == 0):
+				self.cursor.execute("INSERT INTO `users_has_projects` (`users_id`, `projects_id`, `users_has_rights`) VALUES (%s, %s, %s)",(email, id, access))
+				if(sql.cursor.rowcount == 1):
+					return True
+		return False
+	
+	def delete(self, sql, user, id, email, access):
+		sql.cursor.execute("SELECT * FROM projects WHERE users_id = %s AND `projects_id` = %s", (user['id'], id, ))
+		if(sql.cursor.rowcount == 1):
+			sql.cursor.execute("SELECT * FROM users_has_projects WHERE `users_id` = %s AND `projects_id` = %s", (email, id, ))
+			if(sql.cursor.rowcount == 1):
+				self.cursor.execute("DELETE FROM `users_has_projects` WHERE `users_id` = '%s' AND `projects_id` = '%s' AND `users_has_rights` = '%s'",(email, id, access))
+				if(sql.cursor.rowcount == 1):
+					return True
+		return False
 	
 	def id2email(self, sql, id):
 		sql.cursor.execute("SELECT `users_email` FROM users WHERE users_id = %s", (id, ))
 		if(sql.cursor.rowcount == 1):
 			result = sql.cursor.fetchall()
-			return result[0]
+			return result[0][0]
 		else:
 			return False
 			
@@ -158,6 +159,6 @@ class shares:
 		sql.cursor.execute("SELECT `users_id` FROM users WHERE users_email = %s", (email, ))
 		if(sql.cursor.rowcount == 1):
 			result = sql.cursor.fetchall()
-			return result[0]
+			return result[0][0]
 		else:
 			return False
